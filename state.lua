@@ -40,6 +40,7 @@ function state:_init(...)
   self.running = false
   self.onEnterCallback = nil
   self.onExitCallback = nil
+  self.onTickCallback = nil
   self.sequence = nil
   self.transitions = {}
 end
@@ -77,6 +78,10 @@ function state:onExit(callback)
   self.onExitCallback = callback
 end
 
+function state:onTick(callback)
+  self.onTickCallback = callback
+end
+
 function state:_main()
   local nextState = nil
 
@@ -97,6 +102,7 @@ function state:_main()
       break;
     else
       self.sequence:step()
+      if self.onTickCallback then self.onTickCallback() end
     end
   end
 
